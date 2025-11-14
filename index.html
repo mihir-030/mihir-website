@@ -358,7 +358,7 @@
           ticker: "SAIA",
           name: "Saia, Inc.",
           sector: "Industrial — LTL",
-          modelUrl: "", /* paste OneDrive/SharePoint EMBED link here when ready */
+          modelUrl: "https://1drv.ms/x/c/804cf23e86267957/IQSn5D73FcVwS5vmCr3Qa3yvAURIXnxQjsWTzplip3ELyE8", /* paste OneDrive/SharePoint EMBED link here when ready */
           modelDownloadUrl: "https://1drv.ms/x/c/804cf23e86267957/EafkPvcVxXBLm-YKvdBrfK8BUGiol73gsojG185WCuMaog?e=bwIIeP",
           reports: [
             { id:"2025-init", title:"Initiation — Feb, 2025", date:"2025-02-08", tags:["Initiation","Buy"], url:"SAIA Report - OLD.pdf" },
@@ -369,7 +369,7 @@
           ticker: "EXLS",
           name: "ExlService Holdings, Inc.",
           sector: "Business Services",
-          modelUrl: "", /* paste EMBED link later */
+          modelUrl: "https://1drv.ms/x/c/804cf23e86267957/IQRMoJkmV1nURrSx-0Yf7rtwAdGYscGFhk7Vi-LNgR_yXVI", /* paste EMBED link later */
           modelDownloadUrl: "https://1drv.ms/x/c/804cf23e86267957/EUygmSZXWdRGtLH7Rh_uu3ABTfrR16bo047LVmSaFWLUHQ?e=nlxSnm",
           reports: [
             { id:"2025-thesis", title:"Core Thesis — Durability", date:"2025-03-18", tags:["Thesis","Archive"], url:"Mihir - EXLS Pitch.pdf" }
@@ -379,17 +379,17 @@
           ticker: "OKE",
           name: "Oneok, Inc.",
           sector: "Oil & Gas",
-          modelUrl: "", /* paste EMBED link later */
+          modelUrl: "https://1drv.ms/x/c/804cf23e86267957/IQSziLvGZN0dR6e8_GvbIjJ_Ad8jHiR-2o50fdCLxgbHSKY", /* paste EMBED link later */
           modelDownloadUrl: "https://1drv.ms/x/c/804cf23e86267957/EbOIu8Zk3R1Hp7z8a9siMn8BHCsK6y_jZ0M3kIcrxHtGJw?e=gYujpW",
           reports: [
             { id:"2025-thesis", title:"Core Thesis", date:"2025-04-05", tags:["Thesis","Archive"], url:"Oneok^J Inc. (NYSE-OKE) - Mihir.pdf" }
           ]
-        },
-                        {
+        },  
+                {
           ticker: "TNC",
           name: "Tennant Company",
           sector: "Industrial — Equipment",
-          modelUrl: "", /* paste EMBED link later */
+          modelUrl: "https://1drv.ms/x/c/804cf23e86267957/IQTt_AvPxVKeSKhtWmxREt9GAaxZTyZkAcCBCyui0Vrlr9Q", /* paste EMBED link later */
           modelDownloadUrl: "https://1drv.ms/x/c/804cf23e86267957/Ee38C8_FUp5IqG1abFES30YBh8M9TJBuPt7FuJSf7E0V5A?e=tG3gtU",
           reports: [
             { id:"2025-thesis", title:"Thesis + Financial Analysis", date:"2025-02-08", tags:["Thesis","Archive", "Financial Analysis"], url:"Mihir - TNC Financial Analysis.pdf" },
@@ -505,6 +505,20 @@ document.body.classList.toggle('light', savedTheme === 'light');
       document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
       tabs.forEach(t => t.setAttribute('aria-selected', t === tab ? 'true':'false'));
     }));
+    /* ===== Refresh Report + Model whenever switching tabs ===== */
+    document.getElementById('tab-report').addEventListener('click', () => {
+      const pdfFrame = document.getElementById('reportFrame');
+      const pdfObj   = document.getElementById('reportObj');
+
+      if (pdfFrame && pdfFrame.src) pdfFrame.src = pdfFrame.src;   // refresh PDF iframe
+      if (pdfObj && pdfObj.data) pdfObj.data = pdfObj.data;        // refresh PDF object embed
+    });
+
+    document.getElementById('tab-model').addEventListener('click', () => {
+      const modelFrame = document.getElementById('modelFrame');
+
+      if (modelFrame && modelFrame.src) modelFrame.src = modelFrame.src;  // refresh model iframe
+    });
 
     /* ============= Reports ============= */
     const reportSelect = document.getElementById('reportSelect');
@@ -604,9 +618,13 @@ function clearReport(){
     const downloadModel = document.getElementById('downloadModel');
 
     function isEmbedUrl(u){
-      return /^https?:\/\//i.test(u) &&
-        (/(onedrive\.live\.com\/embed)/i.test(u) || /(sharepoint\.com\/.*WopiFrame\.aspx)/i.test(u));
+      return /^https?:\/\//i.test(u) && (
+        /onedrive\.live\.com\/embed/i.test(u) ||
+        /sharepoint\.com\/.*WopiFrame\.aspx/i.test(u) ||
+        /1drv\.ms\/x\//i.test(u)     // allow OneDrive short embed links
+      );
     }
+
 
     function loadModel(company){
       const raw = company.modelUrl || "";
@@ -702,6 +720,8 @@ function clearReport(){
   </script>
 </body>
 </html>
+
+
 
 
 
